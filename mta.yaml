@@ -1,0 +1,57 @@
+_schema-version: "3.2"
+ID: ejercicio_integrador
+version: 0.0.1
+modules:
+- name: ejercicio_integrador-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: ejercicio_integrador-destination-service
+    parameters:
+      content-target: true
+  - name: ejercicio_integrador_html_repo_host
+    parameters:
+      service-key:
+        name: ejercicio_integrador_html_repo_host-key
+  - name: uaa_ejercicio_integrador
+    parameters:
+      service-key:
+        name: uaa_ejercicio_integrador-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: com_proy_ejercicio_integrador_html_repo_host
+          ServiceInstanceName: ejercicio_integrador-html5-app-host-service
+          ServiceKeyName: ejercicio_integrador_html_repo_host-key
+          sap.cloud.service: com.proy
+        - Authentication: OAuth2UserTokenExchange
+          Name: com_proy_uaa_ejercicio_integrador
+          ServiceInstanceName: ejercicio_integrador-xsuaa-service
+          ServiceKeyName: uaa_ejercicio_integrador-key
+          sap.cloud.service: com.proy
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: ejercicio_integrador-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: ejercicio_integrador-destination-service
+    service-plan: lite
+- name: ejercicio_integrador_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ejercicio_integrador-html5-app-host-service
+    service-plan: app-host
+- name: uaa_ejercicio_integrador
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: ejercicio_integrador-xsuaa-service
+    service-plan: application
