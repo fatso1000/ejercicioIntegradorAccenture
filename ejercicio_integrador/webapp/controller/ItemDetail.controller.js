@@ -4,28 +4,59 @@ sap.ui.define(
     "com/proy/ejerciciointegrador/util/Common",
     "sap/ui/core/Fragment",
     "sap/ui/core/UIComponent",
+    "com/proy/ejerciciointegrador/util/Constants",
     "sap/ui/core/routing/HashChanger",
   ],
-  function (BaseController, Common, Fragment, UIComponent) {
+  function (BaseController, Common, Fragment, UIComponent, Constants) {
     "use strict";
+
+    // PROBLEMA AL RE-RENDERIZAR NUEVO ITEM, BUSCAR PROBLEMA
 
     return BaseController.extend(
       "com.proy.ejerciciointegrador.controller.ItemDetail",
       {
-        onInit() {
+        onInit: function () {
+          // Get router info and get params from url
+          // Esta parte sirve para obtener los detalles de la ruta
           var oRouter = UIComponent.getRouterFor(this);
           oRouter
             .getRoute("RouteItemDetail")
             .attachPatternMatched(this._onRouteMatched);
 
-          this._showFormFragment("Display");
+          // GET VALUES FROM MAIN VIEW
+          const sValue = Common.getModelProperties({
+            modelName: Constants.models.itemInfo,
+            pageId: "Main",
+            instance: this,
+          });
+
+          // SET VALUES FROM MAIN VIEW
+          /*  Otra forma de hacer esto es obteniendo el ID del item mediante la URL
+              y obtener la propiedad con el array de items.
+              Luego filtrar el array y obtener el item por el ID. 
+          */
+          Common.onSuccess({
+            oData: sValue,
+            instance: this,
+            modelName: Constants.models.itemDetail,
+          });
+
+          // SHOW FRAGMENT
+          this._showFormFragment();
         },
+        /**
+         * Retrieve url params data
+         * @param {*} oEvent data from button
+         */
         _onRouteMatched: function (oEvent) {
           var oArgs = oEvent.getParameter("arguments");
           var paramValue = oArgs;
-          console.log(oArgs);
+          console.log(paramValue);
         },
-        _showFormFragment: function (sFragmentName) {
+        /**
+         * Show and manage fragment visualization
+         */
+        _showFormFragment: function () {
           let oView = this.getView(),
             oFragment = this.oFragment,
             oPage = this.byId("ItemDetail");
@@ -33,7 +64,7 @@ sap.ui.define(
           if (!oFragment) {
             oFragment = Fragment.load({
               id: oView.getId(),
-              name: "com.proy.ejerciciointegrador.fragments.ItemDetailForm",
+              name: Constants.fragments.itemDetailForm,
               controller: this,
             });
             this.oFragment = oFragment;

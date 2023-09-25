@@ -100,7 +100,7 @@
         },
         {
           "name": "RouteItemDetail",
-          "pattern": "ItemDetail",
+          "pattern": "ItemDetail/{id}",
           "target": ["TargetItemDetail"]
         }
       ],

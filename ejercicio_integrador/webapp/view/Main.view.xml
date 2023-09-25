@@ -7,17 +7,20 @@
 >
     <Page
         title="Home"
+        id="Main"
         class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content"
     >
         <headerContent>
             <Button
-                icon="sap-icon://action"
-                tooltip="Share"
+                icon="sap-icon://globe"
+                tooltip="Change Language"
+                press="changeLanguage"
             />
         </headerContent>
         <content>
             <Table
                 itemPress="navigateToItemDetail"
+                id="idTableItems"
                 items="{
         path: 'orderDetails>/results',
         sorter: {
@@ -64,7 +67,7 @@
                             text="{i18n>SEARCH}"
                             press="handleSearch"
                         />
-                        <Button text="Clear" />
+                        <Button text="Clear" press="clearFilters"/>
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>

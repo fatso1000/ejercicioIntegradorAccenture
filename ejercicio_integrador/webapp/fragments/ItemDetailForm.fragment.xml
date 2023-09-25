@@ -1,6 +1,5 @@
 <core:FragmentDefinition
 	xmlns="sap.m"
-	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core">
 	<VBox class="sapUiSmallMargin">
@@ -23,11 +22,11 @@
 			singleContainerFullSize="false" >
 			<f:content>
 				<Label text="{i18n>ORDER_ID}" />
-				<Text id="OrderIDText" text="{OrderID}" />
+				<Text id="OrderIDText" text="{itemDetail>/OrderID}" />
 				<Label text="{i18n>PRODUCT_ID}" />
-				<Text text="{test>/ProductID}" />
+				<Text text="{itemDetail>/ProductID}" />
 				<Label text="{i18n>PRICE}" />
-				<Text text="{Price}" />
+				<Text text="{itemDetail>/UnitPrice}" />
 			</f:content>
 		</f:SimpleForm>
 	</VBox>
