@@ -27,13 +27,18 @@ sap.ui.define(
 
         sap.ui.getCore().getConfiguration().setLanguage("de");
 
-        this._setInitialValues();
-
         const sPath = sap.ui.require.toUrl(sPathURL);
         var oModel = new JSONModel();
         oModel.loadData(sPath);
 
         this.getView().setModel(oModel, Constants.models.filterData);
+        Common.onSuccess({
+          oData: {
+            selectedKeycomboBoxProductID: "",
+            selectedKeycomboBoxOrderID: "",
+          },
+          instance: this,
+        });
         this._getInitialData();
       },
       /**
@@ -75,6 +80,18 @@ sap.ui.define(
       _onError: function () {
         alert("error");
       },
+      onComboBoxSelectionChange: function (oEvent) {
+        const oModel = this.getView().getModel();
+        const oComboBox = oEvent.getSource();
+        const sSelectedKey = oComboBox.getSelectedKey();
+        const stringList = ["comboBoxOrderID", "comboBoxProductID"];
+        const findList = stringList.filter((substring) =>
+          oEvent.getParameter("id").includes(substring)
+        );
+
+        if (findList.length > 0)
+          oModel.setProperty("/selectedKey" + findList[0], sSelectedKey);
+      },
       /**
        * Get item data from table and navigate to
        * itemDetail view
@@ -107,25 +124,14 @@ sap.ui.define(
         });
       },
       /**
-       * Set initial values wich contains components
-       * of the current view
-       */
-      _setInitialValues: function () {
-        // Setea valores en la instancia `this`
-        this.values = {
-          comboBoxOrderId: this.byId("comboBoxOrderID"),
-          comboBoxProductId: this.byId("comboBoxProductID"),
-          oTable: this.byId("idTableItems"),
-        };
-      },
-      /**
        * Clear filters for the table
        */
       clearFilters: function () {
-        const { oTable, comboBoxOrderId, comboBoxProductId } = this.values;
+        const oTable = this.byId("idTableItems");
+        const oModel = this.getView().getModel();
 
-        comboBoxOrderId.setValue("");
-        comboBoxProductId.setValue("");
+        oModel.setProperty("/selectedKeycomboBoxOrderID", "");
+        oModel.setProperty("/selectedKeycomboBoxProductID", "");
 
         const oBinding = oTable.getBinding("items");
         oBinding.filter([]);
@@ -134,11 +140,16 @@ sap.ui.define(
        * Retrieve values from inputs and filter the data
        */
       handleSearch: function () {
-        const { comboBoxOrderId, comboBoxProductId, oTable } = this.values;
         const filters = [];
+        const oTable = this.byId("idTableItems");
+        const oModel = this.getView().getModel();
 
-        const orderidboxvalue = comboBoxOrderId.getValue(),
-          productidboxvalue = comboBoxProductId.getValue();
+        const orderidboxvalue = oModel.getProperty(
+            "/selectedKeycomboBoxOrderID"
+          ),
+          productidboxvalue = oModel.getProperty(
+            "/selectedKeycomboBoxProductID"
+          );
 
         if (orderidboxvalue !== undefined && orderidboxvalue !== "")
           filters.push(
@@ -158,6 +169,13 @@ sap.ui.define(
           );
 
         const oBinding = oTable.getBinding("items");
+        console.log(
+          filters,
+          productidboxvalue !== undefined && productidboxvalue !== "",
+          orderidboxvalue,
+          productidboxvalue,
+          oBinding
+        );
         oBinding.filter([...filters]);
       },
     });

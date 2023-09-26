@@ -1,109 +1,121 @@
 <mvc:View
-    controllerName="com.proy.ejerciciointegrador.controller.Main"
-    xmlns:mvc="sap.ui.core.mvc"
-    displayBlock="true"
-    xmlns:core="sap.ui.core"
-    xmlns="sap.m"
+	controllerName="com.proy.ejerciciointegrador.controller.Main"
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
 >
-    <Page
-        title="Home"
-        id="Main"
-        class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content"
-    >
-        <headerContent>
-            <Button
-                icon="sap-icon://globe"
-                tooltip="Change Language"
-                press="changeLanguage"
-            />
-        </headerContent>
-        <content>
-            <Table
-                itemPress="navigateToItemDetail"
-                id="idTableItems"
-                items="{
-        path: 'orderDetails>/results',
-        sorter: {
-            path: 'ProductID'
-        }
-    }"
-            >
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <Title
-                            text="{i18n>ORDER_DETAILS}"
-                            level="H2"
-                        />
-                        <ToolbarSpacer />
-                        <ComboBox
-                            id="comboBoxOrderID"
-                            showSecondaryValues="true"
-                            placeholder="{i18n>ORDER_ID}"
-                            items="{
-							path: 'filterData>/OrderDetails',
-							sorter: { path: 'OrderID' }
-						}"
-                        >
-                            <core:ListItem
-                                key="{filterData>OrderID}"
-                                text="{filterData>OrderID}"
-                            />
-                        </ComboBox>
-                        <ComboBox
-                            id="comboBoxProductID"
-                            showSecondaryValues="true"
-                            placeholder="{i18n>PRODUCT_ID}"
-                            items="{
-							path: 'filterData>/OrderDetails',
-							sorter: { path: 'ProductID' }
-						}"
-                        >
-                            <core:ListItem
-                                key="{filterData>ProductID}"
-                                text="{filterData>ProductID}"
-                            />
-                        </ComboBox>
-                        <Button
-                            text="{i18n>SEARCH}"
-                            press="handleSearch"
-                        />
-                        <Button text="Clear" press="clearFilters"/>
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column width="12em">
-                        <Text text="{i18n>ORDER_ID}" />
-                    </Column>
-                    <Column width="12em">
-                        <Text text="{i18n>PRODUCT_ID}" />
-                    </Column>
-                    <Column width="12em">
-                        <Text text="{i18n>PRICE}" />
-                    </Column>
-                    <Column width="12em">
-                        <Text text="{i18n>DISCOUNT}" />
-                    </Column>
-                    <Column width="12em">
-                        <Text text="{i18n>Quantity}" />
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem
-                        vAlign="Middle"
-                        type="Active"
-                    >
-                        <cells>
-                            <ObjectIdentifier text="{orderDetails>OrderID}" />
-                            <Text text="{orderDetails>ProductID}" />
-                            <Text
-                                text="{path: 'orderDetails>UnitPrice', formatter: '.Formatter.price'}"
-                            />
-                            <Text text="{orderDetails>Discount}" />
-                            <Text text="{orderDetails>Quantity}" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </content>
-    </Page>
+	<Page
+		title="Home"
+		id="Main"
+		class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content"
+	>
+		<headerContent>
+			<Button
+				icon="sap-icon://globe"
+				tooltip="Change Language"
+				press="changeLanguage"
+			/>
+		</headerContent>
+		<content>
+			<Table
+				itemPress="navigateToItemDetail"
+				id="idTableItems"
+				items="{
+					path: 'orderDetails>/results',
+					sorter: {
+						path: 'ProductID'
+					}
+				}"
+			>
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title
+							text="{i18n>ORDER_DETAILS}"
+							level="H2"
+						/>
+						<ToolbarSpacer/>
+						<ComboBox
+							id="comboBoxOrderID"
+                            selectedKey="{/selectedKeyOrderId}"
+							showSecondaryValues="true"
+                            selectionChange="onComboBoxSelectionChange"
+							placeholder="{i18n>ORDER_ID}"
+							items="{
+								path: 'filterData>/OrderDetails',
+								sorter: {
+									path: 'OrderID'
+								}
+							}"
+						>
+							<core:ListItem
+								key="{filterData>OrderID}"
+								text="{filterData>OrderID}"
+							/>
+						</ComboBox>
+						<ComboBox
+							id="comboBoxProductID"
+							showSecondaryValues="true"
+                            selectedKey="{/selectedKeyProductId}"
+                            selectionChange="onComboBoxSelectionChange"
+							placeholder="{i18n>PRODUCT_ID}"
+							items="{
+								path: 'filterData>/OrderDetails',
+								sorter: {
+									path: 'ProductID'
+								}
+							}"
+						>
+							<core:ListItem
+								key="{filterData>ProductID}"
+								text="{filterData>ProductID}"
+							/>
+						</ComboBox>
+						<Button
+							text="{i18n>SEARCH}"
+							press="handleSearch"
+						/>
+						<Button
+							text="Clear"
+							press="clearFilters"
+						/>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<Column width="12em">
+						<Text text="{i18n>ORDER_ID}"/>
+					</Column>
+					<Column width="12em">
+						<Text text="{i18n>PRODUCT_ID}"/>
+					</Column>
+					<Column width="12em">
+						<Text text="{i18n>PRICE}"/>
+					</Column>
+					<Column width="12em">
+						<Text text="{i18n>DISCOUNT}"/>
+					</Column>
+					<Column width="12em">
+						<Text text="{i18n>Quantity}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem
+						vAlign="Middle"
+						type="Active"
+					>
+						<cells>
+							<ObjectIdentifier text="{orderDetails>OrderID}"/>
+							<Text text="{orderDetails>ProductID}"/>
+							<Text text="{
+								path: 'orderDetails>UnitPrice',
+								formatter: '.Formatter.price'
+							}"/>
+							<Text text="{orderDetails>Discount}"/>
+							<Text text="{orderDetails>Quantity}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
 </mvc:View>

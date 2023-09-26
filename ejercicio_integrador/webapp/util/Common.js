@@ -22,8 +22,11 @@ sap.ui.define(
         return oView.getModel(modelName).getProperty("/");
       },
       onSuccess: function ({ oData, instance, modelName }) {
+        const args = [];
         const oModel = new JSONModel(oData);
-        instance.getView().setModel(oModel, modelName);
+        args.push(oModel);
+        if (modelName) args.push(modelName);
+        instance.getView().setModel(...args);
       },
     };
   }
